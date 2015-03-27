@@ -79,13 +79,13 @@ astroid_trash = pygame.sprite.Group()
 
 # LOGIC THAT GENERATES FIRST ASTROID - - - - - - - - - -
 
-block = Block(black)
+"""block = Block(black)
 
 block.rect.x = random.randrange(screen_width * 0.8)
 block.rect.y = random.randrange(screen_height * 0.8)
 
 all_sprites_list.add(block)
-block_list.add(block)
+block_list.add(block)"""
 
 
 # Create the player - - - - - - - - - -
@@ -104,7 +104,6 @@ player.rect.x = x_change
 player.rect.y = y_change
 
 
-
 # # # # # # # # # # - - MAIN GAME LOOP - - # # # # # # # # #
 
 def gameLoop():
@@ -116,6 +115,16 @@ def gameLoop():
 
         astroid_speed = 10
 
+        # GENERATED THE ASTROIDS - - - - - - - - - - -
+        block = Block(black)
+
+        block.rect.x = random.randrange(screen_width * 0.8)
+        block.rect.y = -200
+        
+        all_sprites_list.add(block)
+        block_list.add(block)
+
+        # THE LOOP - - - - - - - - - -
         done = False
         while not done:
 
@@ -187,19 +196,18 @@ def gameLoop():
                                 print (astroid_trash)
                                 print (score)
 
+                        
+
+                        if block.rect.y > 600:
+                                print (block.rect.y)
+                                block_list.remove(block)
+                                all_sprites_list.remove(block)
+                                astroid_trash.add(block)
+
                         if len(astroid_trash) == 1 :
                                 block.rect.x = random.randrange(screen_width * 0.8)
-                                block.rect.y = random.randrange(screen_height * 0.8)
+                                block.rect.y = -200
 
-                                """block.rect.x = random.randrange(screen_width * 0.8)
-                                block.rect.y = screen_height - 200
-
-                                block.rect.y += astroid_speed
-
-                                if block.rect.y > screen_height:
-                                        all_sprites_list.add(block)
-                                        block_list.add(block)
-                                        astroid_trash.remove(block)"""
 
 
                                 print (block.rect.x)
@@ -208,7 +216,7 @@ def gameLoop():
                                 all_sprites_list.add(block)
                                 block_list.add(block)
                                 astroid_trash.remove(block)
-
+               
 
                         if bullet.rect.y < -10:
                                 bullet_list.remove(bullet)
@@ -216,12 +224,21 @@ def gameLoop():
 
                 
 
+
+                block.rect.y += astroid_speed
+
+
+                
+
+
                 # GAME BOUNDARIES - - - - - - - - -
 
                 if player.rect.x < 0 or player.rect.x > screen_width - 79:
                         done = True
+                        
                 if player.rect.y < 0 or player.rect.y > screen_height - 70:
                         done = True
+                        
 
 
 
