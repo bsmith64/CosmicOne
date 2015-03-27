@@ -14,27 +14,27 @@ class Block(pygame.sprite.Sprite):
         def __init__(self,color):
                 # Init the parent class
                 pygame.sprite.Sprite.__init__(self)
-
-##                self.image = pygame.image.load('astroid-1.png')
-                self.image = pygame.Surface((50,50)).convert()
-                self.image.fill(pygame.Color("white"))
-
+                self.image = pygame.image.load('astroid-1.png')
                 self.rect = self.image.get_rect()
+
+
+
+                #self.image = pygame.Surface((50,50)).convert()
+                #self.image.fill(pygame.Color("white"))
+                #self.rect = self.image.get_rect()
 
 class Player(pygame.sprite.Sprite):
 
         def __init__(self):
                 pygame.sprite.Sprite.__init__(self)
-##                self.image = pygame.image.load('starshipOne.png')
-                self.image = pygame.Surface((50,50)).convert()
-                self.image.fill(pygame.Color("green"))
-
+                self.image = pygame.image.load('starshipOne.png')
                 self.rect = self.image.get_rect()
+                
 
-        """def update(self):
+                #self.image = pygame.Surface((50,50)).convert()
+                #self.image.fill(pygame.Color("green"))
+                #self.rect = self.image.get_rect()
 
-                pos = pygame.mouse.get_pos()
-                self.rect.x = pos[0]"""
 
 class Bullet(pygame.sprite.Sprite):
 
@@ -76,30 +76,25 @@ astroid_trash = pygame.sprite.Group()
         block_list.add(block)
         all_sprites_list.add(block)"""
 
-# LOGIC THAT GENERATES ASTROIDS
 
+# LOGIC THAT GENERATES FIRST ASTROID - - - - - - - - - -
 
 block = Block(black)
 
-block.rect.x = random.randrange(screen_width)
-block.rect.y = random.randrange(screen_height)
+block.rect.x = random.randrange(screen_width * 0.8)
+block.rect.y = random.randrange(screen_height * 0.8)
 
 all_sprites_list.add(block)
 block_list.add(block)
 
 
-
-# END LOGIC THAT GENERATES ASTROIDS
-
-
-
-
+# Create the player - - - - - - - - - -
 player = Player()
 all_sprites_list.add(player)
 
 
 
-
+# Game paramaters - - - - - - - - - - -
 clock = pygame.time.Clock()
 
 x_change = 300
@@ -108,14 +103,18 @@ y_change = 400
 player.rect.x = x_change
 player.rect.y = y_change
 
-# # # # # # # # # # - - CLASSES - - # # # # # # # # #
+
+
+# # # # # # # # # # - - MAIN GAME LOOP - - # # # # # # # # #
 
 def gameLoop():
 
         score = 0
         x_change = 0
         y_change = 0
-        movement = 15
+        movement = 11
+
+        astroid_speed = 10
 
         done = False
         while not done:
@@ -128,31 +127,33 @@ def gameLoop():
                                 done = True
                                 pygame.quit()
                                 quit()
+                        
+                        # MOVEMENT - - - - - - - - - - -
                         if event.type == pygame.KEYDOWN:
 
                                 if event.key == pygame.K_LEFT:
                                         x_change -= movement
                                 if event.key == pygame.K_RIGHT:
                                         x_change += movement
-
                                 if event.key == pygame.K_UP:
                                         y_change -= movement
-
                                 if event.key == pygame.K_DOWN:
                                         y_change += movement
+                        
+                        # CONTINUAL MOVEMENT - - - - - - - - - - -
                         if event.type == pygame.KEYUP:
 
                                 if event.key == pygame.K_LEFT:
                                         x_change = 0
                                 if event.key == pygame.K_RIGHT:
                                         x_change = 0
-
                                 if event.key == pygame.K_UP:
                                         y_change = 0
-
                                 if event.key == pygame.K_DOWN:
                                         y_change = 0
 
+                        
+                        # BULLET FIRE - - - - - - - - - - -
                         if event.type == pygame.KEYDOWN:
                                 if event.key == pygame.K_s:
 
@@ -165,7 +166,7 @@ def gameLoop():
                                         bullet_list.add(bullet)
 
 
-                                # CONTINUAL MOVEMENT - - - - - - - - - -
+                                
 
                 player.rect.x += x_change
                 player.rect.y += y_change
@@ -187,8 +188,18 @@ def gameLoop():
                                 print (score)
 
                         if len(astroid_trash) == 1 :
-                                block.rect.x = random.randrange(screen_width)
-                                block.rect.y = random.randrange(screen_height)
+                                block.rect.x = random.randrange(screen_width * 0.8)
+                                block.rect.y = random.randrange(screen_height * 0.8)
+
+                                """block.rect.x = random.randrange(screen_width * 0.8)
+                                block.rect.y = screen_height - 200
+
+                                block.rect.y += astroid_speed
+
+                                if block.rect.y > screen_height:
+                                        all_sprites_list.add(block)
+                                        block_list.add(block)
+                                        astroid_trash.remove(block)"""
 
 
                                 print (block.rect.x)
@@ -202,6 +213,15 @@ def gameLoop():
                         if bullet.rect.y < -10:
                                 bullet_list.remove(bullet)
                                 all_sprites_list.remove(bullet)
+
+                
+
+                # GAME BOUNDARIES - - - - - - - - -
+
+                if player.rect.x < 0 or player.rect.x > screen_width - 79:
+                        done = True
+                if player.rect.y < 0 or player.rect.y > screen_height - 70:
+                        done = True
 
 
 
@@ -217,3 +237,6 @@ def gameLoop():
 gameLoop()
 pygame.quit()
 quit()
+
+
+
